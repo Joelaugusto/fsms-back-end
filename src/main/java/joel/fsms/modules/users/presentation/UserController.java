@@ -1,5 +1,6 @@
-package joel.fsms.modules.users.presention;
+package joel.fsms.modules.users.presentation;
 
+import io.swagger.annotations.Api;
 import joel.fsms.modules.users.domain.UserMapper;
 import joel.fsms.modules.users.domain.UserQuery;
 import joel.fsms.modules.users.domain.UserRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Api(tags = "User Management")
 public class UserController{
 
     private final UserServiceImpl userService;

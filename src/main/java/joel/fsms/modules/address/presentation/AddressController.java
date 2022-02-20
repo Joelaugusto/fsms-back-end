@@ -1,5 +1,6 @@
-package joel.fsms.modules.address.presention;
+package joel.fsms.modules.address.presentation;
 
+import io.swagger.annotations.Api;
 import joel.fsms.modules.address.domain.AddressMapper;
 import joel.fsms.modules.address.domain.AddressRequest;
 import joel.fsms.modules.address.domain.AddressResponse;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/address")
 @AllArgsConstructor
+@Api(tags = "Address Management")
 public class AddressController {
 
     private AddressServiceImpl addressService;

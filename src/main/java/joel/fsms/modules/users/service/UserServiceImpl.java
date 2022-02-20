@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(UserRequest userRequest) {
         User user = UserMapper.INSTANCE.toEntity(userRequest);
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setAddress(addressService.save(userRequest.getAddress()));
         return userRepository.save(user);
     }

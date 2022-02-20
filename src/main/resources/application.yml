@@ -24,4 +24,5 @@ spring:
           starttls:
             enable: true
   flyway:
-    locations: classpath:/db/migrations
+    locations: classpath:/db/migrations, classpath:/db/seeds
+    clean-on-validation-error: true
