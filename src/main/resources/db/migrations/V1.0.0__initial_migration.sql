@@ -20,7 +20,8 @@ CREATE TABLE users
     name       VARCHAR(64),
     address_id BIGINT,
     CONSTRAINT pk_user PRIMARY KEY (id),
-    UNIQUE(email, phone),
+    UNIQUE(email),
+    UNIQUE(phone),
     CONSTRAINT FK_USER_ON_ADDRESS FOREIGN KEY (address_id) REFERENCES addresses (id)
 );
 

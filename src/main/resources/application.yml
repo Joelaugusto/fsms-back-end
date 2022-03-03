@@ -15,14 +15,25 @@ spring:
     port: ${MAIL_PORT:1025}
     username: ${MAIL_USERNAME:mailhog}
     password: ${MAIL_PASSWORD:null}
-    from_address: ${MAIL_NOREPLY:joelaugusto97@gmail.xom}
-    from_name: ${MAIL_FROMNAME:FSMS}
+    from_address: ${MAIL_NOREPLY:no-reply@fsms.co.mz}
+    from_name: ${MAIL_FROMNAME:Gestão de cadeia de suplementos agricolas}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+
+    sms:
+      twilio:
+        phone_number: ${TWILIO_PHONE_NUMBER}
+        account_sid: ${TWILIO_SID}
+        auth_token: ${TWILIO_TOKEN}
   flyway:
     locations: classpath:/db/migrations, classpath:/db/seeds
     clean-on-validation-error: true
+
+baseURL: http:localhost:3000/
+auth:
+  jwt-secret: IYU908m141ujgk2pYQdAqHgwEuZ5HGmK
+  jwt-password-reset: WO2Wckb5AeaIhU4hXvyTVuS1kYPPSgg6
