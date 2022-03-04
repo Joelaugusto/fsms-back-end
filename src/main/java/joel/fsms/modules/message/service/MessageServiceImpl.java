@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -35,9 +36,12 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Message save(MessageRequest request, Long chatId) {
 
+        Chat chat = findChatById(chatId);
         Message message = MessageMapper.INSTANCE.toMessage(request);
-        message.setChat(findChatById(chatId));
+        message.setChat(chat);
         message.setSentBy(loggedUser());
+        chat.setUpdatedAt(LocalDateTime.now());
+        chatRepository.save(chat);
         return messageRepository.save(message);
     }
 
