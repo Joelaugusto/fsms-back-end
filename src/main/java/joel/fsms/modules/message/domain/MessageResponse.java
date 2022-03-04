@@ -15,6 +15,8 @@ public class MessageResponse {
 
     private Long sentById;
 
+    private Boolean received;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

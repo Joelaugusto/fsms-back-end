@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class LoginCommand {
-    @ApiModelProperty(required = true, position = -1, example = "admin")
+    @ApiModelProperty(required = true, position = -1, example = "joelaugusto97@gmail.com")
     private String email;
 
-    @ApiModelProperty(required = true, example = "secret")
+    @ApiModelProperty(required = true, example = "Augusto01")
     private String password;
 }

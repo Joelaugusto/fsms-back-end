@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
@@ -31,17 +33,18 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message save(MessageRequest request) {
+    public Message save(MessageRequest request, Long chatId) {
 
         Message message = MessageMapper.INSTANCE.toMessage(request);
-        message.setChat(findChatById(request.getChatId()));
+        message.setChat(findChatById(chatId));
         message.setSentBy(loggedUser());
         return messageRepository.save(message);
     }
 
     @Override
-    public Page<Message> findAll(Pageable pageable) {
-        return messageRepository.findAll(pageable);
+    @Transactional
+    public Page<Message> findAll(Long chatId, Pageable pageable) {
+        return messageRepository.findByChat_IdOrderByCreatedAtDesc(chatId, pageable);
     }
 
     @Override

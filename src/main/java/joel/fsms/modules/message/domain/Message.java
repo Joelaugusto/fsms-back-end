@@ -41,4 +41,7 @@ public class Message {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Column(name = "seen_at")
+    private LocalDateTime seenAt;
+
 }

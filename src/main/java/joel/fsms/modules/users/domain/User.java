@@ -44,9 +44,8 @@ public class User implements UserDetails {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "members")
     private List<Chat> chats = new ArrayList<>();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
