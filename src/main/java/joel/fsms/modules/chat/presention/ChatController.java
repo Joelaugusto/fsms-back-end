@@ -31,8 +31,8 @@ public class ChatController {
     }
 
     @GetMapping("/resume")
-    public ResponseEntity<List<ResumeChat>> fetchAllResumeChat(){
-        return ResponseEntity.ok(chatService.findAllResumeChat());
+    public ResponseEntity<List<ResumeChat>> fetchAllResumeChat(String search){
+        return ResponseEntity.ok(chatService.findAllResumeChat(search));
     }
 
     @PostMapping

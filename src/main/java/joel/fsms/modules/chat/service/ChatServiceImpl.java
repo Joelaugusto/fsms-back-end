@@ -70,8 +70,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<ResumeChat> findAllResumeChat() {
-        return chatRepository.findAllResumeChat(loggedUser().getId()).stream().map(
+    public List<ResumeChat> findAllResumeChat(String search) {
+        return chatRepository.findAllResumeChat(loggedUser().getId(), search).stream().map(
                 e-> new ResumeChat(
                         Long.parseLong(e.get("id").toString()),
                         e.get("name").toString(),

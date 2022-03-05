@@ -48,6 +48,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     @Transactional
     public Page<Message> findAll(Long chatId, Pageable pageable) {
+        seeMessage(chatId);
         return messageRepository.findByChat_IdOrderByCreatedAtDesc(chatId, pageable);
     }
 
@@ -58,7 +59,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void seeMessage(Long chatId) {
-        chatRepository.seeMessage(chatId);
+        chatRepository.seeMessage(chatId, loggedUser().getId());
     }
 
     private Chat findChatById(Long id){

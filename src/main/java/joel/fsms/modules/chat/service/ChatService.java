@@ -14,5 +14,5 @@ public interface ChatService {
     Chat create(ChatRequest request);
     void deleteById(Long id);
     List<Chat> fetchAll();
-    List<ResumeChat> findAllResumeChat();
+    List<ResumeChat> findAllResumeChat(String search);
 }

@@ -21,4 +21,6 @@ public class MessageResponse {
 
     private LocalDateTime updatedAt;
 
+    private LocalDateTime seenAt;
+
 }
