@@ -43,6 +43,12 @@ public class MessageController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/see")
+    public ResponseEntity<Void> seeMessage(@PathVariable Long chatId){
+        messageService.seeMessage(chatId);
+        return ResponseEntity.ok().build();
+    }
+
     private User loggedUser(){
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }

@@ -56,6 +56,11 @@ public class MessageServiceImpl implements MessageService {
         deleteById(id);
     }
 
+    @Override
+    public void seeMessage(Long chatId) {
+        chatRepository.seeMessage(chatId);
+    }
+
     private Chat findChatById(Long id){
         return chatRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CHAT NOT FOUND"));

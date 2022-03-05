@@ -11,4 +11,5 @@ public interface MessageService {
     Message save(MessageRequest request, Long chatId);
     Page<Message> findAll(Long chatId, Pageable pageable);
     void deleteById(Long id);
+    void seeMessage(Long chatId);
 }
