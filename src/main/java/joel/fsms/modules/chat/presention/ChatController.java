@@ -1,22 +1,21 @@
 package joel.fsms.modules.chat.presention;
 
-import joel.fsms.modules.chat.domain.ChatMapper;
-import joel.fsms.modules.chat.domain.ChatRequest;
-import joel.fsms.modules.chat.domain.ChatResponse;
-import joel.fsms.modules.chat.domain.ResumeChat;
+import joel.fsms.modules.chat.domain.*;
 import joel.fsms.modules.chat.service.ChatServiceImpl;
+import joel.fsms.modules.users.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/chats")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ChatController {
-
 
     private final ChatServiceImpl chatService;
 
@@ -31,8 +30,14 @@ public class ChatController {
     }
 
     @GetMapping("/resume")
-    public ResponseEntity<List<ResumeChat>> fetchAllResumeChat(String search){
-        return ResponseEntity.ok(chatService.findAllResumeChat(search));
+    public ResponseEntity<List<ResumeChat>> fetchAllResumeChat(){
+        return ResponseEntity.ok(chatService.findAllResumeChat());
+    }
+
+    @Transactional
+    @GetMapping("/{id}/with-messages")
+    public ResponseEntity<ChatWithMessages> fetchWithMessagesChat(@PathVariable Long id){
+        return ResponseEntity.ok(ChatMapper.INSTANCE.toChatWithMessages(chatService.findById(id), loggedUser().getId()));
     }
 
     @PostMapping
@@ -45,4 +50,9 @@ public class ChatController {
         chatService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    private User loggedUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
 }

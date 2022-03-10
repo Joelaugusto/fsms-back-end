@@ -70,15 +70,24 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<ResumeChat> findAllResumeChat(String search) {
-        return chatRepository.findAllResumeChat(loggedUser().getId(), search).stream().map(
-                e-> new ResumeChat(
-                        Long.parseLong(e.get("id").toString()),
-                        e.get("name").toString(),
-                        Long.parseLong( e.get("not_viewed").toString()))).collect(Collectors.toList());
+    public List<ResumeChat> findAllResumeChat() {
+
+        List<ResumeChat> resumeChats = chatRepository
+            .findAllResumeChat(loggedUser().getId()).stream().map(
+                e -> new ResumeChat(
+                    Long.parseLong(e.get("id").toString()),
+                    e.get("name").toString(),
+                    Long.parseLong(e.get("not_viewed").toString()))).collect(Collectors.toList());
+
+        if (resumeChats.size() > 50) {
+            return resumeChats.subList(0, 50);
+        }
+        return resumeChats;
+
     }
 
-    private User loggedUser(){
+
+    private User loggedUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 

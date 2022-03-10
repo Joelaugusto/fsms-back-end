@@ -24,17 +24,17 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MessageResponse> findById(@PathVariable Long id, @PathVariable Long chatId){
-        return ResponseEntity.ok(MessageMapper.INSTANCE.toResponse(messageService.findById(id), loggedUser()));
+        return ResponseEntity.ok(MessageMapper.INSTANCE.toResponse(messageService.findById(id), loggedUser().getId()));
     }
 
     @GetMapping
     public ResponseEntity<PageJson<MessageResponse>> fetchAll(Pageable pageable, @PathVariable Long chatId){
-        return ResponseEntity.ok(PageJson.of(MessageMapper.INSTANCE.toResponse(messageService.findAll(chatId, pageable), loggedUser())));
+        return ResponseEntity.ok(PageJson.of(MessageMapper.INSTANCE.toResponse(messageService.findAll(chatId, pageable), loggedUser().getId())));
     }
 
     @PostMapping
     public ResponseEntity<MessageResponse> create(@RequestBody MessageRequest request, @PathVariable Long chatId){
-        return ResponseEntity.status(HttpStatus.CREATED).body(MessageMapper.INSTANCE.toResponse(messageService.save(request, chatId), loggedUser()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(MessageMapper.INSTANCE.toResponse(messageService.save(request, chatId), loggedUser().getId()));
     }
 
     @DeleteMapping("/{id}")

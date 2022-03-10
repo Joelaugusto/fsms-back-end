@@ -1,5 +1,8 @@
 package joel.fsms.modules.chat.domain;
 
+import joel.fsms.modules.message.domain.MessageMapper;
+import joel.fsms.modules.users.domain.User;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -20,6 +23,25 @@ public abstract class ChatMapper {
 
     @Mapping(target = "members", ignore = true)
     public abstract void toChat(ChatRequest request,@MappingTarget Chat chat);
+
+    @Mapping(target = "userRole", ignore = true)
+    @Mapping(target = "message", ignore = true)
+    public abstract ChatWithMessages toChatWithMessages(Chat chat, Long userId);
+
+    @AfterMapping
+    public void mapName(Chat chat,@MappingTarget ChatWithMessages chatWithMessages, Long userId){
+        if (chat.getMembers().size() == 2){
+            for (User user : chat.getMembers()){
+                if(!user.getId().equals(userId)){
+                    chatWithMessages.setName(user.getName());
+                    chatWithMessages.setUserRole(user.getUserRole());
+                    chatWithMessages.setMessage(MessageMapper.INSTANCE
+                            .toResponse(chat.getMessage(), userId));
+                    break;
+                }
+            }
+        }
+    }
 
     public List<ChatResponse> toResponse(List<Chat> chat){
         return chat.stream().map(this::toResponse).collect(Collectors.toList());
