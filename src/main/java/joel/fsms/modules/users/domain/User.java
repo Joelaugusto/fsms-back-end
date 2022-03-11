@@ -2,6 +2,7 @@ package joel.fsms.modules.users.domain;
 
 import joel.fsms.modules.address.domain.Address;
 import joel.fsms.modules.chat.domain.Chat;
+import joel.fsms.modules.posts.domain.Post;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
@@ -46,6 +47,9 @@ public class User implements UserDetails {
 
     @ManyToMany(mappedBy = "members")
     private List<Chat> chats = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Post> post = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
