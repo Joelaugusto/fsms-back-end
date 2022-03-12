@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostService {
 
+    Post findByIdAndIncrementVisualizations(Long id);
+
     Post findById(Long id);
     Page<Post> findAll(String search, Pageable pageable);
     Post save(PostRequest request);

@@ -28,7 +28,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> findById(@PathVariable Long id){
-        return ResponseEntity.ok(PostMapper.INSTANCE.mapToResponse(postService.findById(id)));
+        return ResponseEntity.ok(PostMapper.INSTANCE.mapToResponse(postService.findByIdAndIncrementVisualizations(id)));
     }
 
     @PostMapping

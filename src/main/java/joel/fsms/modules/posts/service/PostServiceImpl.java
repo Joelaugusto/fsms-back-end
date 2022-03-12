@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
@@ -23,15 +22,21 @@ public class PostServiceImpl implements PostService {
     private final PostSpecification postSpecification;
 
     @Override
-    public Post findById(Long id) {
+    public Post findById(Long id){
         return postRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "POST NOT FOUND!"));
     }
 
     @Override
+    public Post findByIdAndIncrementVisualizations(Long id) {
+        Post post = findById(id);
+        post.setVisualizations(post.getVisualizations() + 1);
+        return postRepository.save(post);
+    }
+
+    @Override
     @Transactional
     public Page<Post> findAll(String search, Pageable pageable) {
-
         return postRepository.findAll(postSpecification.executeQuery(search), pageable);
     }
 
