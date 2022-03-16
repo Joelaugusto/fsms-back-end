@@ -31,6 +31,7 @@ public class Post {
     private String title;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "body")
     private String body;
 
