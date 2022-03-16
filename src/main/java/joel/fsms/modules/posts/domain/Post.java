@@ -31,7 +31,6 @@ public class Post {
     private String title;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "body")
     private String body;
 
@@ -51,7 +50,6 @@ public class Post {
     @JsonBackReference
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<PostComment> postComment = new ArrayList<>();
-
 
     @PrePersist
     public void prePersist() {

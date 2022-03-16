@@ -8,6 +8,8 @@ import joel.fsms.modules.message.service.MessageServiceImpl;
 import joel.fsms.modules.users.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +30,7 @@ public class MessageController {
     }
 
     @GetMapping
-    public ResponseEntity<PageJson<MessageResponse>> fetchAll(Pageable pageable, @PathVariable Long chatId){
+    public ResponseEntity<PageJson<MessageResponse>> fetchAll(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 20) Pageable pageable, @PathVariable Long chatId){
         return ResponseEntity.ok(PageJson.of(MessageMapper.INSTANCE.toResponse(messageService.findAll(chatId, pageable), loggedUser().getId())));
     }
 

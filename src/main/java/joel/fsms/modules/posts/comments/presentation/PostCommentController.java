@@ -7,6 +7,8 @@ import joel.fsms.modules.posts.comments.domain.PostCommentResponse;
 import joel.fsms.modules.posts.comments.service.PostCommentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/posts/{postId}/comments")
 @RequiredArgsConstructor
+@CrossOrigin
 public class PostCommentController {
 
     private final PostCommentServiceImpl postCommentService;
 
     @GetMapping
-    public ResponseEntity<PageJson<PostCommentResponse>> findAll(Pageable pageable,@PathVariable Long postId) {
+    public ResponseEntity<PageJson<PostCommentResponse>> findAll(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 20) Pageable pageable, @PathVariable Long postId) {
         return ResponseEntity.ok(PageJson.of(PostCommentMapper.MAPPER.toResponse(postCommentService.findAll(pageable, postId))));
     }
 

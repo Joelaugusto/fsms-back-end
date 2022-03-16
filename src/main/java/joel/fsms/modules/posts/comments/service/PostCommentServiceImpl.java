@@ -8,20 +8,24 @@ import joel.fsms.modules.users.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostCommentServiceImpl implements PostCommentService {
 
     private final PostCommentRepository repository;
     private final PostServiceImpl postService;
 
     @Override
-    public Page<PostComment> findAll(Pageable pageable, Long postId) {
+    public Page<PostComment> findAll(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 20) Pageable pageable, Long postId) {
         return repository.findByPost_Id(postId, pageable);
     }
 

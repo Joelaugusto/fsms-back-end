@@ -9,6 +9,9 @@ public class PostResponse {
     private String title;
     private String body;
     private Long visualizations;
+    private String username;
+    private Long userId;
+    private Integer comments;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
