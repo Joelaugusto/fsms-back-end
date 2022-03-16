@@ -2,9 +2,7 @@ package joel.fsms.modules.message.service;
 
 import joel.fsms.modules.chat.domain.Chat;
 import joel.fsms.modules.chat.persistence.ChatRepository;
-import joel.fsms.modules.message.domain.Message;
-import joel.fsms.modules.message.domain.MessageMapper;
-import joel.fsms.modules.message.domain.MessageRequest;
+import joel.fsms.modules.message.domain.*;
 import joel.fsms.modules.message.persistence.MessageRepository;
 import joel.fsms.modules.users.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +41,18 @@ public class MessageServiceImpl implements MessageService {
         chat.setUpdatedAt(LocalDateTime.now());
         chatRepository.save(chat);
         return messageRepository.save(message);
+    }
+
+    public MessageResponse save(MessageRequestWS request) {
+
+        Chat chat = findChatById(request.getChatId());
+        Message message = new Message();
+        message.setMessage(request.getMessage());
+        message.setChat(chat);
+        message.setSentBy(loggedUser());
+        chat.setUpdatedAt(LocalDateTime.now());
+        chatRepository.save(chat);
+        return MessageMapper.INSTANCE.toResponse(messageRepository.save(message), loggedUser().getId());
     }
 
     @Override

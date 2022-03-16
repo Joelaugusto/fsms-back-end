@@ -1,5 +1,7 @@
 package joel.fsms.modules.posts.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import joel.fsms.modules.posts.comments.domain.PostComment;
 import joel.fsms.modules.users.domain.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "posts")
 @Entity
@@ -43,6 +47,10 @@ public class Post {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<PostComment> postComment = new ArrayList<>();
 
 
     @PrePersist

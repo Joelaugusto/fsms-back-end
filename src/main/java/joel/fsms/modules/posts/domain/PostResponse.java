@@ -1,6 +1,4 @@
 package joel.fsms.modules.posts.domain;
-
-import joel.fsms.modules.users.domain.User;
 import lombok.Data;
 import java.time.LocalDateTime;
 

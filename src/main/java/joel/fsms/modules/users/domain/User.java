@@ -1,5 +1,7 @@
 package joel.fsms.modules.users.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import joel.fsms.modules.address.domain.Address;
 import joel.fsms.modules.chat.domain.Chat;
 import joel.fsms.modules.posts.domain.Post;
@@ -45,9 +47,11 @@ public class User implements UserDetails {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "members")
     private List<Chat> chats = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Post> post = new ArrayList<>();
 

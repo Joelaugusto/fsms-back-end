@@ -9,6 +9,6 @@ public class LoginCommand {
     @ApiModelProperty(required = true, position = -1, example = "joelaugusto97@gmail.com")
     private String email;
 
-    @ApiModelProperty(required = true, example = "Augusto01")
+    @ApiModelProperty(required = true, example = "string")
     private String password;
 }

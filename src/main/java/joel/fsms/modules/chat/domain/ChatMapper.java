@@ -40,6 +40,9 @@ public abstract class ChatMapper {
                     break;
                 }
             }
+        }else{
+            chatWithMessages.setMessage(MessageMapper.INSTANCE
+                    .toResponse(chat.getMessage(), userId));
         }
     }
 

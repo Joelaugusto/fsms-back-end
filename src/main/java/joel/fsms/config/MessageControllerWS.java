@@ -1,4 +1,4 @@
-package joel.fsms.config.jwt.configuration;
+package joel.fsms.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -6,29 +6,36 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import joel.fsms.config.jwt.configuration.AuthTokenFilter;
 import joel.fsms.config.jwt.persistence.BlacklistedTokenRepository;
 import joel.fsms.exceptions.AuthenticationException;
+import joel.fsms.modules.message.domain.MessageRequestWS;
+import joel.fsms.modules.message.domain.MessageResponse;
+import joel.fsms.modules.message.service.MessageServiceImpl;
 import joel.fsms.modules.users.domain.User;
 import joel.fsms.modules.users.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.stereotype.Controller;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Controller
 @RequiredArgsConstructor
-public class AuthTokenFilter extends OncePerRequestFilter {
+public class MessageControllerWS {
+
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final MessageServiceImpl messageService;
     private final UserServiceImpl userService;
     private final BlacklistedTokenRepository blacklistedTokenRepository;
     private final Environment env;
@@ -39,30 +46,40 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     public static final RuntimeException EX_TOKEN_BLACKLISTED = new AuthenticationException("The supplied Token has been blacklisted.");
 
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                   FilterChain filterChain) throws ServletException, IOException, AuthenticationException {
-        String apiKey = convert(httpServletRequest);
-        if (apiKey == null) {
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
-            return;
-        } else {
+    @MessageMapping("/messages-all")
+    @SendTo("/topic/messages")
+    public MessageResponse receiveMessage(@Payload Map<String, String> message){
+
+        check(message.get("apiKey"));
+
+        MessageRequestWS messageRequestWS =
+                new MessageRequestWS(message.get("message"), Long.parseLong(message.get("chatId")));
+
+        return messageService.save(messageRequestWS);
+    }
+
+    @MessageMapping("/private-message")
+    public MessageResponse recMessage(@Payload MessageResponse message){
+        simpMessagingTemplate.convertAndSendToUser(message.getSentById().toString(),"/private",message);
+        System.out.println(message);
+        return message;
+    }
+
+
+    private void check(String apiKey){
             validateToken(apiKey);
-                try {
-                    DecodedJWT jwt = getDecodedJWT(apiKey);
-                    Long id = Long.parseLong(jwt.getSubject());
-                    User principal = userService.findById(id);
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, apiKey, principal.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                } catch (JWTVerificationException exception){
-                    logger.log(Level.INFO, "Invalid Signing configuration / Couldn't convert Claims");
-                } catch (Exception e) {
+            try {
+                DecodedJWT jwt = getDecodedJWT(apiKey);
+                Long id = Long.parseLong(jwt.getSubject());
+                User principal = userService.findById(id);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, apiKey, principal.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } catch (JWTVerificationException exception){
+                logger.log(Level.INFO, "Invalid Signing configuration / Couldn't convert Claims");
+            } catch (Exception e) {
                 SecurityContextHolder.clearContext();
                 throw new AuthenticationException(e.getMessage());
             }
-        }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     private void validateToken(String token) {
@@ -80,12 +97,4 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         return verifier.verify(token);
     }
 
-    public static String convert(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-        if (authorization != null && authorization.length()>7) {
-            if (authorization.startsWith("Bearer")) return authorization.substring(7);
-            return authorization;
-        }
-        return null;
-    }
 }

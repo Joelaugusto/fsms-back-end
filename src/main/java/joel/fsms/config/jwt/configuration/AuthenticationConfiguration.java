@@ -53,7 +53,7 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.PATCH, "/api/v1/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/password-reset/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/password-reset").permitAll()
-                .antMatchers("/api/v1/**").authenticated()
+                .antMatchers("**").permitAll()
                 .anyRequest().permitAll();
         http.headers().frameOptions().disable();
     }
