@@ -1,6 +1,7 @@
 package joel.fsms.modules.users.presentation;
 
 import io.swagger.annotations.Api;
+import joel.fsms.config.jwt.presentation.AuthTokenDto;
 import joel.fsms.modules.users.domain.*;
 import joel.fsms.modules.users.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,8 @@ public class UserController{
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id,@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> update(@PathVariable Long id,
+                                               @RequestBody UserRequest userRequest) {
         return ResponseEntity.ok(UserMapper.INSTANCE.toResponse(userService.update(id, userRequest)));
     }
 
@@ -40,6 +42,12 @@ public class UserController{
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest userRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(UserMapper.INSTANCE.toResponse(userService.create(userRequest)));
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<AuthTokenDto> create(@RequestBody UserCreateRequest userRequest, @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.create(userRequest, id));
     }
 
     @DeleteMapping("/{id}")

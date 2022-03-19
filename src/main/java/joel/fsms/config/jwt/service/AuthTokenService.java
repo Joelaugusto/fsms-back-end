@@ -13,17 +13,20 @@ import joel.fsms.config.jwt.presentation.AuthTokenDto;
 import joel.fsms.config.utils.Converter;
 import joel.fsms.exceptions.AuthenticationException;
 import joel.fsms.modules.users.domain.User;
+import joel.fsms.modules.users.persistence.UserRepository;
 import joel.fsms.modules.users.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -41,7 +44,7 @@ public class AuthTokenService implements ApplicationContextAware {
     public static final RuntimeException EX_TOKEN_BLACKLISTED = new AuthenticationException("The supplied Token has been blacklisted.");
     private final Logger logger = Logger.getLogger(AuthTokenService.class.getName());
     private ApplicationContext context;
-    private final UserServiceImpl userService;
+    private final UserRepository userRepository;
     private final BlacklistedTokenRepository blacklistedTokenRepository;
     private final Environment env;
 
@@ -84,7 +87,7 @@ public class AuthTokenService implements ApplicationContextAware {
             DecodedJWT jwt = getDecodedJWT(token);
             Claim refreshUntil = jwt.getClaim("refreshUntil");
             if (refreshUntil.asDate().before(Calendar.getInstance().getTime())) throw EX_EXPIRED_TOKEN;
-            return createToken(userService.findById(Long.parseLong(jwt.getSubject())));
+            return createToken(userRepository.findById(Long.parseLong(jwt.getSubject())).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED)));
         } catch (JWTVerificationException exception){
             logger.log(Level.INFO, "Invalid Signing configuration / Couldn't convert Claims");
         }

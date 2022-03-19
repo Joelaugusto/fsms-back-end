@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import joel.fsms.config.jwt.presentation.AuthTokenDto;
 import joel.fsms.config.jwt.service.AuthTokenService;
 import joel.fsms.config.notification.EMAIL.Notifiable;
 import joel.fsms.config.utils.Converter;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AddressServiceImpl addressService;
+    private final AuthTokenService authTokenService;
     private final Environment env;
     private final Logger logger = Logger.getLogger(AuthTokenService.class.getName());
 
@@ -65,6 +67,15 @@ public class UserServiceImpl implements UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setAddress(addressService.save(userRequest.getAddress()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public AuthTokenDto create(UserCreateRequest userRequest, Long id) {
+        User user = findById(id);
+        UserMapper.INSTANCE.copyProprieties(userRequest,user);
+        user.setAddress(addressService.save(userRequest.getAddress()));
+        return authTokenService.createToken(userRepository.save(user));
+
     }
 
     @Override
@@ -101,7 +112,7 @@ public class UserServiceImpl implements UserService {
                 .withSubject(uniqueConstraints.getEmail())
                 .withExpiresAt(Converter.toDate(LocalDateTime.now().plusMinutes(deadlineMinutes)))
                 .withClaim("code", code+"")
-                .withClaim("password", uniqueConstraints.getPassword())
+                .withClaim("password",new BCryptPasswordEncoder().encode(uniqueConstraints.getPassword()))
                 .withClaim("email", uniqueConstraints.getEmail())
                 .withClaim("phone", uniqueConstraints.getPhone())
                 .sign(algorithm);
@@ -113,6 +124,14 @@ public class UserServiceImpl implements UserService {
     public User verifyAccount(String token){
         try {
             DecodedJWT jwt = getDecodedJWT(token);
+
+            Map<String, Boolean> map = verifyIfExists(new UserUniqueConstraints(jwt.getClaim("email").asString(),
+                    jwt.getClaim("phone").asString(),null));
+
+            if(map.get("phone") || map.get("email")){
+                return userRepository.findByEmailOrPhone(jwt.getClaim("email").asString(),jwt.getClaim("phone").asString())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            }
             User user = new User();
             user.setPassword(jwt.getClaim("password").asString());
             user.setEmail(jwt.getClaim("email").asString());

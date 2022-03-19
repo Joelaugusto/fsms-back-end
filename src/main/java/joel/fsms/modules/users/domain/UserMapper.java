@@ -12,6 +12,7 @@ public abstract class UserMapper {
 
     public abstract UserResponse toResponse(User user);
     public abstract void copyProprieties(UserRequest userRequest,@MappingTarget User user);
+    public abstract void copyProprieties(UserCreateRequest userRequest,@MappingTarget User user);
     public abstract User toEntity(UserRequest userRequest);
     public Page<UserResponse> toResponse(Page<User> users) {
         return users.map(UserMapper.INSTANCE::toResponse);
