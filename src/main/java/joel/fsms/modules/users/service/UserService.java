@@ -17,4 +17,5 @@ public interface UserService {
     void delete(Long id);
     Page<User> findAll(Pageable pageable, UserQuery userQuery);
     Map<String, Boolean> verifyIfExists(UserUniqueConstraints uniqueConstraints);
+    void sendEmailVerification(UserUniqueConstraints uniqueConstraints);
 }

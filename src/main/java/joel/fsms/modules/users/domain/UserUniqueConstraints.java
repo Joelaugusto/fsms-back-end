@@ -10,4 +10,5 @@ public class UserUniqueConstraints {
 
     private String email;
     private String phone;
+    private String password;
 }

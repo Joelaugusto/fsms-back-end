@@ -52,4 +52,15 @@ public class UserController{
     public ResponseEntity<Page<UserResponse>> findAll(Pageable pageable, UserQuery userQuery) {
         return ResponseEntity.ok(UserMapper.INSTANCE.toResponse(userService.findAll(pageable, userQuery)));
     }
+
+    @PostMapping("verify-email")
+    public ResponseEntity<?> sendEmail(@RequestBody UserUniqueConstraints constraints){
+        userService.sendEmailVerification(constraints);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("verify-email/{token}")
+    public ResponseEntity<UserResponse> verifyAccount(@PathVariable String token){
+        return ResponseEntity.ok(UserMapper.INSTANCE.toResponse(userService.verifyAccount(token)));
+    }
 }

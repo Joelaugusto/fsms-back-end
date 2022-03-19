@@ -101,7 +101,7 @@ public class AuthTokenService implements ApplicationContextAware {
     private DecodedJWT getDecodedJWT(String token){
         Algorithm algorithm = Algorithm.HMAC256(Objects.requireNonNull(env.getProperty("auth.jwt-secret")));
         JWTVerifier verifier = JWT.require(algorithm)
-                .withIssuer("BV")
+                .withIssuer("FSMS")
                 .build();
         return verifier.verify(token);
     }

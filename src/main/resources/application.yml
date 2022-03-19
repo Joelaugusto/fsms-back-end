@@ -33,7 +33,7 @@ spring:
     locations: classpath:/db/migrations, classpath:/db/seeds
     clean-on-validation-error: true
 
-baseURL: http:localhost:3000/
+baseURL: http://localhost:3000/
 auth:
   jwt-secret: IYU908m141ujgk2pYQdAqHgwEuZ5HGmK
   jwt-password-reset: WO2Wckb5AeaIhU4hXvyTVuS1kYPPSgg6

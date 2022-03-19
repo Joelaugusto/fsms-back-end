@@ -50,6 +50,7 @@ public class AuthenticationConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users/verify-email").permitAll()
                 .antMatchers(HttpMethod.PATCH, "/api/v1/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/password-reset/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/password-reset").permitAll()
