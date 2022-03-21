@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -70,5 +71,10 @@ public class UserController{
     @PostMapping("verify-email/{token}")
     public ResponseEntity<UserResponse> verifyAccount(@PathVariable String token){
         return ResponseEntity.ok(UserMapper.INSTANCE.toResponse(userService.verifyAccount(token)));
+    }
+
+    @GetMapping("map-markers")
+    public ResponseEntity<List<UserMapMarker>> findAll() {
+        return ResponseEntity.ok(userService.findAllMapMarkers());
     }
 }

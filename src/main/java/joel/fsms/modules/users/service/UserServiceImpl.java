@@ -121,6 +121,11 @@ public class UserServiceImpl implements UserService {
                 .sendNotification(new EmailVerification(code, deadlineMinutes+"", token, env));
     }
 
+    @Override
+    public List<UserMapMarker> findAllMapMarkers() {
+        return userRepository.findAllMapMarker();
+    }
+
     public User verifyAccount(String token){
         try {
             DecodedJWT jwt = getDecodedJWT(token);
