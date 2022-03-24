@@ -10,12 +10,25 @@ spring:
     password: ${DB_PASSWORD:secret}
   jpa:
     open-in-view: false
+#  mail:
+#    host: ${MAIL_HOST:localhost}
+#    port: ${MAIL_PORT:1025}
+#    username: ${MAIL_USERNAME:mailhog}
+#    password: ${MAIL_PASSWORD:null}
+#    from_address: ${MAIL_NOREPLY:no-reply@fsms.co.mz}
+#    from_name: ${MAIL_FROMNAME:Gestão de cadeia de suplementos agricolas}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
   mail:
-    host: ${MAIL_HOST:localhost}
-    port: ${MAIL_PORT:1025}
-    username: ${MAIL_USERNAME:mailhog}
-    password: ${MAIL_PASSWORD:null}
-    from_address: ${MAIL_NOREPLY:no-reply@fsms.co.mz}
+    host: ${MAIL_HOST:smtp-mail.outlook.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:joelaugusto97@hotmail.com}
+    password: ${MAIL_PASSWORD:@ugu$t01}
+    from_address: ${MAIL_NOREPLY:joelaugusto97@hotmail.com}
     from_name: ${MAIL_FROMNAME:Gestão de cadeia de suplementos agricolas}
     properties:
       mail:
