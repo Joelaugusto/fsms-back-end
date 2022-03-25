@@ -5,7 +5,7 @@ spring:
   profiles:
     active: ${APP_ENV:development}
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5436/fsms}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5436/fsms}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:secret}
   jpa:
