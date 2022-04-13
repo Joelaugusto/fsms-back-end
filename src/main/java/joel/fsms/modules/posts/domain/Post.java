@@ -1,6 +1,7 @@
 package joel.fsms.modules.posts.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import joel.fsms.modules.groups.domain.Group;
 import joel.fsms.modules.posts.comments.domain.PostComment;
 import joel.fsms.modules.users.domain.User;
 import lombok.Getter;
@@ -51,6 +52,10 @@ public class Post {
     @JsonBackReference
     @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<PostComment> postComment = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     @PrePersist
     public void prePersist() {

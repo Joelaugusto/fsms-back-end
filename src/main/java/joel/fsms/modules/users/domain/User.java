@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import joel.fsms.modules.address.domain.Address;
 import joel.fsms.modules.chat.domain.Chat;
+import joel.fsms.modules.groups.domain.Group;
 import joel.fsms.modules.posts.domain.Post;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +55,12 @@ public class User implements UserDetails {
     @JsonBackReference
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Post> post = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "users_groups",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "groups_id"))
+    private List<Group> groups = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
