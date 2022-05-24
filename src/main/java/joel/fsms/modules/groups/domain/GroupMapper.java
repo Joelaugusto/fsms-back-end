@@ -3,6 +3,7 @@ package joel.fsms.modules.groups.domain;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,5 +19,8 @@ public abstract class GroupMapper {
     public abstract void copyProprieties(UpdateGroupRequest request,@MappingTarget Group group);
     public List<GroupResponse> toResponse(List<Group> groups){
         return groups.stream().map(this::toResponse).collect(Collectors.toList());
+    }
+    public Page<GroupResponse> toResponse(Page<Group> groups){
+        return groups.map(this::toResponse);
     }
 }

@@ -61,7 +61,6 @@ public class MessageControllerWS {
     @MessageMapping("/private-message")
     public MessageResponse recMessage(@Payload MessageResponse message){
         simpMessagingTemplate.convertAndSendToUser(message.getSentById().toString(),"/private",message);
-        System.out.println(message);
         return message;
     }
 

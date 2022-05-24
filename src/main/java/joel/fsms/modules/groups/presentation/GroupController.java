@@ -1,8 +1,12 @@
 package joel.fsms.modules.groups.presentation;
 
+import joel.fsms.config.utils.PageJson;
 import joel.fsms.modules.groups.domain.*;
 import joel.fsms.modules.groups.service.GroupServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/groups")
 @RequiredArgsConstructor
+@CrossOrigin
 public class GroupController {
 
     private final GroupServiceImpl groupService;
@@ -24,7 +29,12 @@ public class GroupController {
 
     @GetMapping
     public ResponseEntity<List<GroupResponse>> findAll(){
-        return ResponseEntity.ok(GroupMapper.INSTANCE.toResponse(groupService.findAll()));
+        return ResponseEntity.ok(GroupMapper.INSTANCE.toResponse(groupService.findAllMyGroups()));
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<PageJson<GroupResponse>> findOther(@PageableDefault(size = 12) Pageable pageable){
+        return ResponseEntity.ok(PageJson.of(GroupMapper.INSTANCE.toResponse(groupService.findOtherGroups(pageable))));
     }
 
     @PostMapping
