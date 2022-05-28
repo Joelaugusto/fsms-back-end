@@ -1,6 +1,8 @@
 package joel.fsms.modules.posts.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import joel.fsms.config.file.presentation.FileJson;
+import joel.fsms.modules.configuration.ListFileJson;
 import joel.fsms.modules.groups.domain.Group;
 import joel.fsms.modules.posts.comments.domain.PostComment;
 import joel.fsms.modules.users.domain.User;
@@ -56,6 +58,11 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+    @Lob
+    @Column(name = "images")
+    @Convert(converter = ListFileJson.class)
+    private List<FileJson> images;
 
     @PrePersist
     public void prePersist() {

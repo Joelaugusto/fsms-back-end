@@ -1,5 +1,6 @@
 package joel.fsms.modules.posts.service;
 
+import joel.fsms.config.file.service.FileServiceImpl;
 import joel.fsms.modules.posts.domain.Post;
 import joel.fsms.modules.posts.domain.PostMapper;
 import joel.fsms.modules.posts.domain.PostRequest;
@@ -20,6 +21,8 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostSpecification postSpecification;
+
+    private final FileServiceImpl fileService;
 
     @Override
     public Post findById(Long id){
@@ -44,7 +47,10 @@ public class PostServiceImpl implements PostService {
     public Post save(PostRequest request) {
         Post post = PostMapper.INSTANCE.mapToPost(request);
         post.setUser(loggedUser());
-        return postRepository.save(post);
+        post.setImages(fileService.upload(request.getImages()));
+        Post saved = postRepository.save(post);
+        fileService.upload(request.getImages());
+        return saved;
     }
 
     @Override

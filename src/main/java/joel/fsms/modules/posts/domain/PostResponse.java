@@ -1,6 +1,8 @@
 package joel.fsms.modules.posts.domain;
+import joel.fsms.config.file.presentation.FileJson;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class PostResponse {
@@ -12,6 +14,7 @@ public class PostResponse {
     private String username;
     private Long userId;
     private Integer comments;
+    private List<FileJson> images;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
