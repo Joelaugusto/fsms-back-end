@@ -41,6 +41,9 @@ public class User implements UserDetails {
     @Column(name = "name", length = 64)
     private String name;
 
+    @Column(name = "profile_photo_url")
+    private String profilePhotoUrl;
+
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;

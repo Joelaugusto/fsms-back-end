@@ -5,6 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import joel.fsms.config.file.domain.ImageBase64Request;
+import joel.fsms.config.file.presentation.FileJson;
+import joel.fsms.config.file.service.FileServiceImpl;
 import joel.fsms.config.jwt.presentation.AuthTokenDto;
 import joel.fsms.config.jwt.service.AuthTokenService;
 import joel.fsms.config.notification.EMAIL.Notifiable;
@@ -18,6 +21,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private final AuthTokenService authTokenService;
     private final Environment env;
     private final Logger logger = Logger.getLogger(AuthTokenService.class.getName());
+
+    private final FileServiceImpl fileService;
 
 
     @Override
@@ -126,6 +132,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllMapMarker();
     }
 
+    @Override
+    public FileJson updateProfilePhoto(ImageBase64Request image) {
+        FileJson file = fileService.upload(image);
+        User user = loggedUser();
+        user.setProfilePhotoUrl(file.getPath());
+        userRepository.save(user);
+        return file;
+    }
+
     public User verifyAccount(String token){
         try {
             DecodedJWT jwt = getDecodedJWT(token);
@@ -155,5 +170,9 @@ public class UserServiceImpl implements UserService {
                 .withIssuer("FSMS")
                 .build();
         return verifier.verify(token);
+    }
+
+    private User loggedUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -1,5 +1,7 @@
 package joel.fsms.modules.users.service;
 
+import joel.fsms.config.file.domain.ImageBase64Request;
+import joel.fsms.config.file.presentation.FileJson;
 import joel.fsms.config.jwt.presentation.AuthTokenDto;
 import joel.fsms.modules.users.domain.*;
 import org.springframework.data.domain.Page;
@@ -19,4 +21,6 @@ public interface UserService {
     Map<String, Boolean> verifyIfExists(UserUniqueConstraints uniqueConstraints);
     void sendEmailVerification(UserUniqueConstraints uniqueConstraints);
     List<UserMapMarker> findAllMapMarkers();
+
+    FileJson updateProfilePhoto(ImageBase64Request image);
 }

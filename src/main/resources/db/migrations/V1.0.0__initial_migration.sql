@@ -18,6 +18,7 @@ CREATE TABLE users
     user_role  VARCHAR(255),
     password   VARCHAR(63),
     name       VARCHAR(63),
+    profile_photo_url VARCHAR,
     address_id BIGINT,
     CONSTRAINT pk_user PRIMARY KEY (id),
     UNIQUE (email),

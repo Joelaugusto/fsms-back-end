@@ -1,6 +1,8 @@
 package joel.fsms.modules.users.presentation;
 
 import io.swagger.annotations.Api;
+import joel.fsms.config.file.domain.ImageBase64Request;
+import joel.fsms.config.file.presentation.FileJson;
 import joel.fsms.config.jwt.presentation.AuthTokenDto;
 import joel.fsms.modules.users.domain.*;
 import joel.fsms.modules.users.service.UserServiceImpl;
@@ -76,5 +78,10 @@ public class UserController{
     @GetMapping("map-markers")
     public ResponseEntity<List<UserMapMarker>> findAll() {
         return ResponseEntity.ok(userService.findAllMapMarkers());
+    }
+
+    @PutMapping("/profile-photo")
+    public ResponseEntity<FileJson> uploadProfilePhoto(@RequestBody ImageBase64Request request){
+        return ResponseEntity.ok(userService.updateProfilePhoto(request));
     }
 }
