@@ -12,6 +12,7 @@ public class PostResponse {
     private String body;
     private Long visualizations;
     private String username;
+    private String userProfilePhotoUrl;
     private Long userId;
     private Integer comments;
     private List<FileJson> images;
