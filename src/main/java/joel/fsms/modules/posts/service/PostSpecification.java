@@ -21,4 +21,9 @@ public class PostSpecification {
         return (root, query, cb) -> body != null ?
                 cb.like(cb.upper(root.get("body")), "%"+body.toUpperCase()+"%") : cb.and();
     }
+
+    public Specification<Post> findByGroupId(Long groupId){
+        return (root, query, cb) -> groupId != null ?
+                cb.equal(root.get("group").get("id"), groupId) : cb.and();
+    }
 }

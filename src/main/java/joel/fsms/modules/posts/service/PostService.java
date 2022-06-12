@@ -12,6 +12,9 @@ public interface PostService {
     Post findById(Long id);
     Page<Post> findAll(String search, Pageable pageable);
     Post save(PostRequest request);
+    Post save(PostRequest request, Long groupId);
     Post update(PostRequest request, Long id);
     void deleteById(Long id);
+
+    Page<Post> findByGroupId(String search, Long groupId, Pageable pageable);
 }

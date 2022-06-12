@@ -6,8 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificationExecutor<Post> {
     Page<Post> findByOrderByCreatedAtDesc(Pageable pageable);
+
+    List<Post> findByGroup_IdOrderByCreatedAtDesc(Long id);
+
 
 
 }

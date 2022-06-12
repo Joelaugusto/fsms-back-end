@@ -14,6 +14,10 @@ public class ListFileJson implements AttributeConverter<List<FileJson>, String> 
     @Override
     public String convertToDatabaseColumn(List<FileJson> fileJsons) {
 
+        if (fileJsons == null || fileJsons.isEmpty()){
+            return "";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         fileJsons.forEach(fileJson -> stringBuilder.append(fileJson.getName()).append(",").append(fileJson.getPath()).append(";"));
@@ -26,6 +30,9 @@ public class ListFileJson implements AttributeConverter<List<FileJson>, String> 
     @Override
     public List<FileJson> convertToEntityAttribute(String s) {
 
+        if (s == null || s.isEmpty()){
+            return new ArrayList<>();
+        }
         List<FileJson> list = new ArrayList<>();
         String[] files = s.split(";");
 

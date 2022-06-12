@@ -3,9 +3,14 @@ package joel.fsms.modules.groups.presentation;
 import joel.fsms.config.utils.PageJson;
 import joel.fsms.modules.groups.domain.*;
 import joel.fsms.modules.groups.service.GroupServiceImpl;
+import joel.fsms.modules.posts.domain.PostMapper;
+import joel.fsms.modules.posts.domain.PostRequest;
+import joel.fsms.modules.posts.domain.PostResponse;
+import joel.fsms.modules.posts.service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +25,7 @@ import java.util.List;
 public class GroupController {
 
     private final GroupServiceImpl groupService;
+    private final PostServiceImpl postService;
 
 
     @GetMapping("/{id}")
@@ -57,6 +63,17 @@ public class GroupController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         groupService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{groupId}/posts")
+    public ResponseEntity<PageJson<PostResponse>> findAll(String query, @PageableDefault(sort = "createdAt",
+            direction = Sort.Direction.DESC, size = 20) Pageable pageable, @PathVariable Long groupId){
+        return ResponseEntity.ok(PageJson.of(PostMapper.INSTANCE.mapToResponse(postService.findByGroupId(query,groupId, pageable))));
+    }
+
+    @PostMapping("/{groupId}/posts")
+    public ResponseEntity<PostResponse> save(@RequestBody PostRequest request, @PathVariable Long groupId){
+        return ResponseEntity.ok(PostMapper.INSTANCE.mapToResponse(postService.save(request, groupId)));
     }
 
 
