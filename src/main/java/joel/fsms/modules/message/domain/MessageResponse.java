@@ -13,6 +13,8 @@ public class MessageResponse {
 
     private String sentByName;
 
+    private String sendByProfilePhotoUrl;
+
     private Long sentById;
 
     private Boolean received;

@@ -18,6 +18,7 @@ public abstract class MessageMapper {
     @Mapping(source = "message.chat.id", target = "chatId")
     @Mapping(source = "message.sentBy.id", target = "sentById")
     @Mapping(source = "message.sentBy.name", target = "sentByName")
+    @Mapping(source = "message.sentBy.profilePhotoUrl", target = "sendByProfilePhotoUrl")
     @Mapping(source = "message.id", target = "id")
     public abstract MessageResponse toResponse(Message message, Long loggedUser);
 
