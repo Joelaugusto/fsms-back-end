@@ -1,7 +1,6 @@
 package joel.fsms.modules.users.domain;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
@@ -9,9 +8,8 @@ import org.springframework.data.domain.Page;
 @Mapper
 public abstract class UserMapper {
 
-    public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    public static final UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(source = "userRole", target = "role")
     public abstract UserResponse toResponse(User user);
     public abstract void copyProprieties(UserRequest userRequest,@MappingTarget User user);
     public abstract void copyProprieties(UserCreateRequest userRequest,@MappingTarget User user);

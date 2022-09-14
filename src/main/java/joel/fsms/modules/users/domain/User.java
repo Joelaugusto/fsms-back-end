@@ -32,8 +32,8 @@ public class User implements UserDetails {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
-    private UserRole userRole;
+    @Column(name = "role")
+    private UserRole role;
 
     @Column(name = "password", length = 64)
     private String password;

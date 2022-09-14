@@ -11,6 +11,6 @@ public class ChatWithMessages {
 
     private Long id;
     private String name;
-    private UserRole userRole;
+    private UserRole role;
     private List<MessageResponse> message = new ArrayList<>();
 }

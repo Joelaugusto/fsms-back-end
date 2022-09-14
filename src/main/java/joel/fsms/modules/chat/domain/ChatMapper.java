@@ -24,7 +24,7 @@ public abstract class ChatMapper {
     @Mapping(target = "members", ignore = true)
     public abstract void toChat(ChatRequest request,@MappingTarget Chat chat);
 
-    @Mapping(target = "userRole", ignore = true)
+    @Mapping(target = "role", ignore = true)
     @Mapping(target = "message", ignore = true)
     public abstract ChatWithMessages toChatWithMessages(Chat chat, Long userId);
 
@@ -34,7 +34,7 @@ public abstract class ChatMapper {
             for (User user : chat.getMembers()){
                 if(!user.getId().equals(userId)){
                     chatWithMessages.setName(user.getName());
-                    chatWithMessages.setUserRole(user.getUserRole());
+                    chatWithMessages.setRole(user.getRole());
                     chatWithMessages.setMessage(MessageMapper.INSTANCE
                             .toResponse(chat.getMessage(), userId));
                     break;
