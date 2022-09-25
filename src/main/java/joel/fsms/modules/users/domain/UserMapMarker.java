@@ -14,5 +14,6 @@ public class UserMapMarker {
     private UserRole role;
     private Float latitude;
     private Float longitude;
+    private String profileUrl;
 
 }

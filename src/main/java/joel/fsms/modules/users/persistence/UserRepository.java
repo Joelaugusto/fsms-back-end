@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     Set<User> findByIdIn(Collection<Long> ids);
 
 
-    @Query("select new joel.fsms.modules.users.domain.UserMapMarker(u.id, u.name, u.role, u.address.latitude, u.address.longitude) from User u")
+    @Query("select new joel.fsms.modules.users.domain.UserMapMarker(u.id, u.name, u.role, u.address.latitude, u.address.longitude, u.profilePhotoUrl) from User u")
     List<UserMapMarker> findAllMapMarker();
 
 
