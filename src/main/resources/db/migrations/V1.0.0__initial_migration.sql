@@ -69,6 +69,7 @@ CREATE TABLE posts
     images         TEXT,
     visualizations BIGINT                      DEFAULT 0,
     user_id        BIGINT,
+    videos_link TEXT,
     created_at     TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP WITHOUT TIME ZONE,
     PRIMARY KEY (id),

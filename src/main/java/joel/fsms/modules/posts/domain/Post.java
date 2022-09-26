@@ -2,6 +2,7 @@ package joel.fsms.modules.posts.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import joel.fsms.config.file.presentation.FileJson;
+import joel.fsms.config.utils.ListToStringConverter;
 import joel.fsms.modules.configuration.ListFileJson;
 import joel.fsms.modules.groups.domain.Group;
 import joel.fsms.modules.posts.comments.domain.PostComment;
@@ -40,6 +41,11 @@ public class Post {
 
     @Column(name = "visualizations")
     private Long visualizations;
+
+    @Lob
+    @Column(name = "videos_link")
+    @Convert(converter = ListToStringConverter.class)
+    private List<String> videosLink = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

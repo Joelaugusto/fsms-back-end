@@ -10,6 +10,7 @@ public class PostRequest {
 
     private String title;
     private String body;
+    private List<String> videosLink;
     private List<ImageBase64Request> images;
 
 }
