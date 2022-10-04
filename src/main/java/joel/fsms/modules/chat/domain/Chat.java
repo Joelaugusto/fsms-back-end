@@ -1,5 +1,6 @@
 package joel.fsms.modules.chat.domain;
 
+import joel.fsms.modules.groups.domain.Group;
 import joel.fsms.modules.message.domain.Message;
 import joel.fsms.modules.users.domain.User;
 import lombok.Getter;
@@ -49,5 +50,8 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name = "created_by")
     private User createdBy;
+
+    @OneToOne(mappedBy = "chat", orphanRemoval = true)
+    private Group group;
 
 }

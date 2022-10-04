@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,10 +52,19 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public Chat create(ChatRequest request) {
+        User user = loggedUser();
+
+        Optional<Chat> oldChat = chatRepository
+                .findFirstByMembers_IdAndGroupNullAndCreatedBy(request.getMembers().get(0),user);
+
+        if (oldChat.isPresent()){
+            return oldChat.get();
+        }
+
         Chat chat = ChatMapper.INSTANCE.toChat(request);
         Chat saved = chatRepository.save(chat);
         List<Long> members = request.getMembers();
-        members.add(loggedUser().getId());
+        members.add(user.getId());
         addMember(chat.getId(), members);
         return saved;
     }
@@ -75,9 +85,9 @@ public class ChatServiceImpl implements ChatService {
         List<ResumeChat> resumeChats = chatRepository
             .findAllResumeChat(loggedUser().getId()).stream().map(
                 e -> new ResumeChat(
-                    Long.parseLong(e.get("id").toString()),
-                    e.get("name").toString(),
-                    Long.parseLong(e.get("not_viewed").toString()))).collect(Collectors.toList());
+                    Long.parseLong(e.get("id")+""),
+                    e.get("name")+"",
+                    Long.parseLong(e.get("not_viewed")+""))).collect(Collectors.toList());
 
         if (resumeChats.size() > 50) {
             return resumeChats.subList(0, 50);

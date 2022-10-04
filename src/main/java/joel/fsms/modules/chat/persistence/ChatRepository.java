@@ -1,6 +1,7 @@
 package joel.fsms.modules.chat.persistence;
 
 import joel.fsms.modules.chat.domain.Chat;
+import joel.fsms.modules.users.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Transactional
 public interface ChatRepository extends JpaRepository<Chat, Long> {
@@ -18,5 +20,11 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Modifying
     @Query("update Message m set m.seenAt = now() where m.seenAt is null and m.chat.id = ?1 and m.sentBy.id != ?2")
     void seeMessage(Long chatId, Long userId);
+
+    Optional<Chat> findFirstByMembers_IdAndGroupNullAndCreatedBy(Long id, User createdBy);
+
+
+
+
 
 }
