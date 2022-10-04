@@ -4,6 +4,7 @@ import joel.fsms.config.utils.PageJson;
 import joel.fsms.modules.groups.domain.*;
 import joel.fsms.modules.groups.service.GroupServiceImpl;
 import joel.fsms.modules.posts.domain.PostMapper;
+import joel.fsms.modules.posts.domain.PostQuery;
 import joel.fsms.modules.posts.domain.PostRequest;
 import joel.fsms.modules.posts.domain.PostResponse;
 import joel.fsms.modules.posts.service.PostServiceImpl;
@@ -66,7 +67,7 @@ public class GroupController {
     }
 
     @GetMapping("/{groupId}/posts")
-    public ResponseEntity<PageJson<PostResponse>> findAll(String query, @PageableDefault(sort = "createdAt",
+    public ResponseEntity<PageJson<PostResponse>> findAll(PostQuery query, @PageableDefault(sort = "createdAt",
             direction = Sort.Direction.DESC, size = 20) Pageable pageable, @PathVariable Long groupId){
         return ResponseEntity.ok(PageJson.of(PostMapper.INSTANCE.mapToResponse(postService.findByGroupId(query,groupId, pageable))));
     }

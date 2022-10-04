@@ -71,6 +71,8 @@ public class GroupServiceImpl implements GroupService {
         return repository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "GROUP NOT FOUND"));
     }
 
+
+
     @Override
     public void delete(Long id) {
         repository.deleteById(id);

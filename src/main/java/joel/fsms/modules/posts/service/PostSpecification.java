@@ -2,6 +2,7 @@ package joel.fsms.modules.posts.service;
 
 import joel.fsms.modules.groups.persistence.GroupRepository;
 import joel.fsms.modules.posts.domain.Post;
+import joel.fsms.modules.posts.domain.PostQuery;
 import joel.fsms.modules.users.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,15 +16,21 @@ public class PostSpecification {
 
     private final GroupRepository groupRepository;
 
-    public Specification<Post> executeQuery(String query){
+    public Specification<Post> executeQuery(PostQuery query){
 
         Specification<Post> specification = findWithoutGroup().or(findPostOnMyGroup());
 
-        if (query == null || query.isEmpty()) {
+        if (query == null || query.getQuery() == null ||  query.getQuery().isEmpty()) {
             return specification;
         }
 
-        return (findByTitle(query).or(findByBody(query))).and(specification);
+        specification = (findByTitle(query.getQuery()).or(findByBody(query.getQuery()))).and(specification);
+
+        if (Boolean.TRUE.equals(query.getOnlyCreatedByMe())) {
+            specification.and(findCreatedBy(loggedUser()));
+        }
+
+        return specification;
     }
 
 
@@ -46,6 +53,10 @@ public class PostSpecification {
 
     private Specification<Post> findPostOnMyGroup() {
         return (root, query, cb) -> root.get("group").get("id").in(groupRepository.findIdByUserId(loggedUser().getId()));
+    }
+
+    private Specification<Post> findCreatedBy(User user) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("user"), user);
     }
 
     private User loggedUser(){

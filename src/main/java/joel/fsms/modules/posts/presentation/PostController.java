@@ -3,6 +3,7 @@ package joel.fsms.modules.posts.presentation;
 
 import joel.fsms.config.utils.PageJson;
 import joel.fsms.modules.posts.domain.PostMapper;
+import joel.fsms.modules.posts.domain.PostQuery;
 import joel.fsms.modules.posts.domain.PostRequest;
 import joel.fsms.modules.posts.domain.PostResponse;
 import joel.fsms.modules.posts.service.PostServiceImpl;
@@ -22,7 +23,7 @@ public class PostController {
     private final PostServiceImpl postService;
 
     @GetMapping
-    public ResponseEntity<PageJson<PostResponse>> findAll(String query,@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 20) Pageable pageable){
+    public ResponseEntity<PageJson<PostResponse>> findAll(PostQuery query, @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 20) Pageable pageable){
         return ResponseEntity.ok(PageJson.of(PostMapper.INSTANCE.mapToResponse(postService.findAll(query, pageable))));
     }
 

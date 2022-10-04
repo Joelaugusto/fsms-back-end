@@ -4,6 +4,7 @@ import joel.fsms.config.file.service.FileServiceImpl;
 import joel.fsms.modules.groups.service.GroupServiceImpl;
 import joel.fsms.modules.posts.domain.Post;
 import joel.fsms.modules.posts.domain.PostMapper;
+import joel.fsms.modules.posts.domain.PostQuery;
 import joel.fsms.modules.posts.domain.PostRequest;
 import joel.fsms.modules.posts.persistence.PostRepository;
 import joel.fsms.modules.users.domain.User;
@@ -42,7 +43,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Page<Post> findAll(String search, Pageable pageable) {
+    public Page<Post> findAll(PostQuery search, Pageable pageable) {
         return postRepository.findAll(postSpecification.executeQuery(search), pageable);
     }
 
@@ -85,7 +86,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Page<Post> findByGroupId(String search, Long groupId, Pageable pageable) {
+    public Page<Post> findByGroupId(PostQuery search, Long groupId, Pageable pageable) {
         return postRepository.findAll(postSpecification.executeQuery(search).and(postSpecification.findByGroupId(groupId)), pageable);
     }
 
