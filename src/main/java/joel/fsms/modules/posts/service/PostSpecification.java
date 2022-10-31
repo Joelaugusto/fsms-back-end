@@ -18,6 +18,10 @@ public class PostSpecification {
 
     public Specification<Post> executeQuery(PostQuery query){
 
+        if(query != null && Boolean.TRUE.equals(query.getOnlyCreatedByMe())){
+            return findCreatedBy(loggedUser());
+        }
+
         Specification<Post> specification = findWithoutGroup().or(findPostOnMyGroup());
 
         if (query == null || query.getQuery() == null ||  query.getQuery().isEmpty()) {
@@ -25,10 +29,6 @@ public class PostSpecification {
         }
 
         specification = (findByTitle(query.getQuery()).or(findByBody(query.getQuery()))).and(specification);
-
-        if (Boolean.TRUE.equals(query.getOnlyCreatedByMe())) {
-            specification.and(findCreatedBy(loggedUser()));
-        }
 
         return specification;
     }
