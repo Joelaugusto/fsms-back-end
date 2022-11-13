@@ -12,6 +12,7 @@ public abstract class PostCommentMapper {
     public static final PostCommentMapper MAPPER = Mappers.getMapper(PostCommentMapper.class);
 
     @Mapping(source = "post.id", target = "postId")
+    @Mapping(target = "user.role", source = "user.role.name")
     public abstract PostCommentResponse toResponse(PostComment postComment);
     public Page<PostCommentResponse> toResponse(Page<PostComment> comments){
         return comments.map(this::toResponse);

@@ -56,6 +56,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 } catch (JWTVerificationException exception){
+                    exception.printStackTrace();
                     logger.log(Level.INFO, "Invalid Signing configuration / Couldn't convert Claims");
                 } catch (Exception e) {
                 SecurityContextHolder.clearContext();

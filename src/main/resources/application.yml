@@ -44,7 +44,7 @@ spring:
         auth_token: ${TWILIO_TOKEN}
   flyway:
     locations: classpath:/db/migrations, classpath:/db/seeds
-    clean-on-validation-error: true
+    clean-on-validation-error: false
 
 baseURL: http://localhost:3000/
 auth:

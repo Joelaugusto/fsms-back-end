@@ -23,4 +23,5 @@ public interface UserService {
     List<UserMapMarker> findAllMapMarkers();
 
     FileJson updateProfilePhoto(ImageBase64Request image);
+
 }

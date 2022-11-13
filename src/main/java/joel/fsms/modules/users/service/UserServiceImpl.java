@@ -15,6 +15,7 @@ import joel.fsms.config.utils.Converter;
 import joel.fsms.modules.address.service.AddressServiceImpl;
 import joel.fsms.modules.users.domain.*;
 import joel.fsms.modules.users.notification.EmailVerification;
+import joel.fsms.modules.users.persistence.RoleRepository;
 import joel.fsms.modules.users.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
@@ -37,6 +38,7 @@ import static joel.fsms.config.jwt.service.AuthTokenService.EX_INVALID_TOKEN;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserRoleService roleService;
     private final AddressServiceImpl addressService;
     private final AuthTokenService authTokenService;
     private final Environment env;
@@ -75,10 +77,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+
+
     @Override
     public AuthTokenDto create(UserCreateRequest userRequest, Long id) {
         User user = findById(id);
         UserMapper.INSTANCE.copyProprieties(userRequest,user);
+        user.setRole(roleService.findRole(userRequest.getRole()));
         user.setAddress(addressService.save(userRequest.getAddress()));
         return authTokenService.createToken(userRepository.save(user));
 

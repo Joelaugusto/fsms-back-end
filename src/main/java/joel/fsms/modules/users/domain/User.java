@@ -31,8 +31,8 @@ public class User implements UserDetails {
     @Column(name = "phone", unique = true, length = 16)
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private UserRole role;
 
     @Column(name = "password", length = 64)

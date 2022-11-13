@@ -7,6 +7,6 @@ import lombok.Data;
 public class UserCreateRequest {
 
     private String name;
-    private UserRole role;
+    private Long role;
     private AddressRequest address;
 }

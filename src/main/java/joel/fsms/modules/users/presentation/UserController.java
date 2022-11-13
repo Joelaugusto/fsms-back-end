@@ -5,6 +5,7 @@ import joel.fsms.config.file.domain.ImageBase64Request;
 import joel.fsms.config.file.presentation.FileJson;
 import joel.fsms.config.jwt.presentation.AuthTokenDto;
 import joel.fsms.modules.users.domain.*;
+import joel.fsms.modules.users.service.UserRoleService;
 import joel.fsms.modules.users.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class UserController{
 
     private final UserServiceImpl userService;
+    private final UserRoleService roleService;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
@@ -64,8 +66,13 @@ public class UserController{
         return ResponseEntity.ok(UserMapper.INSTANCE.toResponse(userService.findAll(pageable, userQuery)));
     }
 
+    @GetMapping("/roles")
+    public ResponseEntity<List<UserRole>> findAllRole() {
+        return ResponseEntity.ok(roleService.findAll());
+    }
+
     @PostMapping("verify-email")
-    public ResponseEntity<?> sendEmail(@RequestBody UserUniqueConstraints constraints){
+    public ResponseEntity<Void> sendEmail(@RequestBody UserUniqueConstraints constraints){
         userService.sendEmailVerification(constraints);
         return ResponseEntity.ok().build();
     }

@@ -10,7 +10,7 @@ public class UserResponse {
     private String name;
     private String email;
     private String phone;
-    private UserRole role;
+    private String role;
     private AddressResponse address;
     private String profilePhotoUrl;
 }

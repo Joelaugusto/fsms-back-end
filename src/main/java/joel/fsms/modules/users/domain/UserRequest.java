@@ -10,7 +10,7 @@ public class UserRequest {
     private String email;
     private String password;
     private String phone;
-    private UserRole role;
+    private Long role;
     private AddressRequest address;
 
 

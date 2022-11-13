@@ -16,6 +16,7 @@ public abstract class ChatMapper {
 
     public static final ChatMapper INSTANCE = Mappers.getMapper(ChatMapper.class);
 
+    @Mapping(target = "createdBy", ignore = true)
     public abstract ChatResponse toResponse(Chat chat);
 
     @Mapping(target = "members", ignore = true)
